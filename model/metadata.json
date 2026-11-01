@@ -1,0 +1,51 @@
+{
+  "nombre": "WODPredict-AI - sobrecarga al día siguiente",
+  "version": "1.0.0",
+  "fecha_entrenamiento": "2026-10-30",
+  "algoritmo": "Regresión logística (C = 0.1) en un Pipeline de scikit-learn",
+  "umbral": 0.17,
+  "dataset": "rick-lastra/wodpredict-synth@v1.0 (limpio: Actividad_5@v1.0)",
+  "sesiones_entrenamiento": 65403,
+  "sesiones_prueba": 16498,
+  "variables_numericas": [
+    "age",
+    "days_since_prev_session",
+    "sessions_last_3d",
+    "sessions_last_7d",
+    "sessions_last_28d",
+    "load_last_3d",
+    "load_last_7d",
+    "mean_session_load_28d",
+    "acwr3_freq",
+    "acwr3_load",
+    "acwr_freq",
+    "acwr_load",
+    "days_since_first_session",
+    "prev_rpe",
+    "prev_session_load",
+    "prev_has_note",
+    "prob_fatiga_prev_session",
+    "prob_fatiga_last_note",
+    "days_since_last_note",
+    "notes_last_28d"
+  ],
+  "variables_categoricas": [
+    "level",
+    "sex",
+    "language"
+  ],
+  "metricas_prueba": {
+    "exactitud": 0.815,
+    "precision": 0.378,
+    "recall": 0.732,
+    "f1": 0.498,
+    "roc_auc": 0.859
+  },
+  "versiones": {
+    "python": "3.12.16",
+    "numpy": "2.0.2",
+    "pandas": "2.2.2",
+    "scikit-learn": "1.6.1",
+    "joblib": "1.6.0"
+  }
+}

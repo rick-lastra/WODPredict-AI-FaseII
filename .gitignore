@@ -1,0 +1,44 @@
+# .gitignore - Lo que se queda SOLO en la computadora local y NO se sube a GitHub.
+# Nada de esto hace falta para clonar y replicar la solución.
+
+# Entornos virtuales de Python (cada quien crea el suyo con requirements-dev.txt)
+.venv/
+venv/
+env/
+
+# Cachés y archivos temporales que generan Python, pytest y Jupyter
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+*.tmp
+*.log
+
+# Credenciales y configuración local (nunca se suben)
+.env
+.env.*
+*.publishsettings
+.azure/
+
+# Datos: el entrenamiento los descarga del tag v1.0 de la Actividad 5; no se guardan en el repositorio
+datos/
+data/
+*.csv
+*.parquet
+
+# Experimentos locales de MLflow (se regeneran)
+mlruns/
+mlflow.db
+
+# Evidencias que regenera el notebook en cada ejecución (tablas, gráficas y salida de pytest).
+# La evidencia que sí se sube: notebook con salidas, tests/casos_extremos.md, docs/capturas/ y los PDF.
+evidencias/
+
+# Documentos editables de Word: se suben solo las versiones en PDF de docs/
+docs/*.docx
+~$*
+
+# Configuración del editor y archivos del sistema
+.vscode/
+.DS_Store
+Thumbs.db

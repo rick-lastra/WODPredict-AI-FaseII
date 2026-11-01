@@ -1,0 +1,15 @@
+# Archivos que NO se copian a la imagen de Docker (la hacen más pesada o no sirven para la API).
+.git
+.venv
+venv
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+notebooks/
+tests/
+docs/
+evidencias/
+mlruns/
+mlflow.db
+*.md

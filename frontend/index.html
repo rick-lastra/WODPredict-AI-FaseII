@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WODPredict-AI · Riesgo de sobrecarga</title>
+  <style>
+    /* Estilos sencillos: el objetivo es mostrar la integración frontend - API, no el diseño. */
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+    header { background: #1f2a44; color: white; padding: 16px 24px; }
+    header h1 { margin: 0; font-size: 22px; }
+    header p { margin: 4px 0 0; font-size: 14px; color: #cfd6e4; }
+    main { max-width: 980px; margin: 0 auto; padding: 16px; }
+    fieldset { background: white; border: 1px solid #d6d9df; border-radius: 8px; margin-bottom: 12px; }
+    legend { font-weight: bold; padding: 0 6px; }
+    .campos { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+    label { font-size: 13px; display: flex; flex-direction: column; gap: 3px; }
+    input, select { padding: 6px; font-size: 14px; border: 1px solid #b9bec8; border-radius: 4px; }
+    .botones { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+    button { padding: 9px 14px; font-size: 14px; border: none; border-radius: 6px; cursor: pointer; }
+    .principal { background: #2a78d6; color: white; }
+    .secundario { background: #e3e6eb; }
+    #resultado { background: white; border-radius: 8px; padding: 16px; border-left: 8px solid #999; display: none; }
+    #resultado.Bajo { border-color: #1baf7a; }
+    #resultado.Moderado { border-color: #f0a202; }
+    #resultado.Alto { border-color: #d64545; }
+    #resultado.error { border-color: #d64545; }
+    pre { background: #f4f5f7; padding: 8px; overflow-x: auto; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WODPredict-AI · Riesgo de sobrecarga al día siguiente</h1>
+    <p>UnderCover Fitness · el modelo recomienda y el coach decide</p>
+  </header>
+
+  <main>
+    <!-- Botones para llenar el formulario con perfiles de ejemplo -->
+    <div class="botones">
+      <button type="button" class="secundario" onclick="llenarEjemplo('bajo')">Ejemplo: riesgo bajo</button>
+      <button type="button" class="secundario" onclick="llenarEjemplo('moderado')">Ejemplo: riesgo moderado</button>
+      <button type="button" class="secundario" onclick="llenarEjemplo('alto')">Ejemplo: riesgo alto</button>
+    </div>
+
+    <form id="formulario">
+      <fieldset>
+        <legend>Perfil del atleta</legend>
+        <div class="campos">
+          <label>Nivel
+            <select name="level"><option>novato</option><option>intermedio</option><option>élite</option></select>
+          </label>
+          <label>Sexo
+            <select name="sex"><option>F</option><option>M</option></select>
+          </label>
+          <label>Idioma de comentarios
+            <select name="language"><option>es</option><option>en</option></select>
+          </label>
+          <label>Edad (16 a 80) <input name="age" type="number" step="1"></label>
+          <label>Días desde su primera sesión <input name="days_since_first_session" type="number" required></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Frecuencia de entrenamiento</legend>
+        <div class="campos">
+          <label>Días desde la sesión anterior <input name="days_since_prev_session" type="number" required></label>
+          <label>Sesiones últimos 3 días <input name="sessions_last_3d" type="number" required></label>
+          <label>Sesiones últimos 7 días <input name="sessions_last_7d" type="number" required></label>
+          <label>Sesiones últimos 28 días <input name="sessions_last_28d" type="number" required></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Carga de entrenamiento (RPE × minutos)</legend>
+        <div class="campos">
+          <label>Carga últimos 3 días <input name="load_last_3d" type="number" step="any" required></label>
+          <label>Carga últimos 7 días <input name="load_last_7d" type="number" step="any" required></label>
+          <label>Carga promedio por sesión (28 días) <input name="mean_session_load_28d" type="number" step="any"></label>
+          <label>ACWR frecuencia 3 días <input name="acwr3_freq" type="number" step="any"></label>
+          <label>ACWR carga 3 días <input name="acwr3_load" type="number" step="any"></label>
+          <label>ACWR frecuencia 7 días <input name="acwr_freq" type="number" step="any"></label>
+          <label>ACWR carga 7 días <input name="acwr_load" type="number" step="any"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Sesión anterior y comentarios</legend>
+        <div class="campos">
+          <label>RPE sesión anterior (1 a 10) <input name="prev_rpe" type="number" step="any"></label>
+          <label>Carga sesión anterior <input name="prev_session_load" type="number" step="any" required></label>
+          <label>¿Dejó comentario? (0 o 1) <input name="prev_has_note" type="number" required></label>
+          <label>Prob. fatiga comentario anterior <input name="prob_fatiga_prev_session" type="number" step="any"></label>
+          <label>Prob. fatiga último comentario <input name="prob_fatiga_last_note" type="number" step="any"></label>
+          <label>Días desde el último comentario <input name="days_since_last_note" type="number" step="any"></label>
+          <label>Comentarios últimos 28 días <input name="notes_last_28d" type="number" required></label>
+        </div>
+      </fieldset>
+
+      <div class="botones">
+        <button type="submit" class="principal">Calcular riesgo</button>
+      </div>
+    </form>
+
+    <!-- Aquí se muestra la respuesta de la API -->
+    <div id="resultado"></div>
+  </main>
+
+  <script>
+    // Perfiles de ejemplo (los mismos de tests/ejemplos/*.json).
+    const EJEMPLOS = {
+      bajo: {level: "novato", sex: "F", language: "es", age: 53, days_since_first_session: 507,
+             days_since_prev_session: 2, sessions_last_3d: 1, sessions_last_7d: 1, sessions_last_28d: 6,
+             load_last_3d: 104, load_last_7d: 104, mean_session_load_28d: 413.7, acwr3_freq: 1.56,
+             acwr3_load: 0.39, acwr_freq: 0.67, acwr_load: 0.17, prev_rpe: 4, prev_session_load: 104,
+             prev_has_note: 1, prob_fatiga_prev_session: 0.07, prob_fatiga_last_note: 0.07,
+             days_since_last_note: 2, notes_last_28d: 2},
+      moderado: {level: "élite", sex: "F", language: "es", age: 31, days_since_first_session: 365,
+             days_since_prev_session: 1, sessions_last_3d: 2, sessions_last_7d: 5, sessions_last_28d: 18,
+             load_last_3d: 760, load_last_7d: 1650, mean_session_load_28d: 310, acwr3_freq: 1.2,
+             acwr3_load: 1.3, acwr_freq: 1.1, acwr_load: 1.25, prev_rpe: 8, prev_session_load: 420,
+             prev_has_note: 1, prob_fatiga_prev_session: 0.70, prob_fatiga_last_note: 0.70,
+             days_since_last_note: 1, notes_last_28d: 8},
+      alto: {level: "novato", sex: "F", language: "es", age: 30, days_since_first_session: 129,
+             days_since_prev_session: 2, sessions_last_3d: 2, sessions_last_7d: 3, sessions_last_28d: 9,
+             load_last_3d: 1121.8, load_last_7d: 1441.5, mean_session_load_28d: 370.9, acwr3_freq: 2.07,
+             acwr3_load: 3.14, acwr_freq: 1.33, acwr_load: 1.73, prev_rpe: 9, prev_session_load: 549,
+             prev_has_note: 1, prob_fatiga_prev_session: 0.88, prob_fatiga_last_note: 0.88,
+             days_since_last_note: 2, notes_last_28d: 2}
+    };
+
+    const formulario = document.getElementById("formulario");
+    const resultado = document.getElementById("resultado");
+
+    // Copia los valores de un ejemplo a los campos del formulario.
+    function llenarEjemplo(nombre) {
+      for (const [campo, valor] of Object.entries(EJEMPLOS[nombre])) {
+        formulario.elements[campo].value = valor;
+      }
+    }
+
+    // Convierte el formulario en el JSON que espera POST /predict.
+    function leerFormulario() {
+      const textos = ["level", "sex", "language"];
+      const datos = {};
+      for (const campo of formulario.elements) {
+        if (!campo.name) continue;
+        if (textos.includes(campo.name)) datos[campo.name] = campo.value;
+        else datos[campo.name] = campo.value === "" ? null : Number(campo.value);  // vacío -> null
+      }
+      return datos;
+    }
+
+    // Al enviar: llama a la API real y muestra la respuesta.
+    formulario.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      const datos = leerFormulario();
+      const respuesta = await fetch("/predict", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(datos)
+      });
+      const json = await respuesta.json();
+      resultado.style.display = "block";
+
+      if (respuesta.ok) {
+        resultado.className = json.riesgo;
+        resultado.innerHTML = `
+          <h2>Riesgo ${json.riesgo}: ${(json.probabilidad * 100).toFixed(1)} %</h2>
+          <p><b>Alerta:</b> ${json.prediccion === 1 ? "Sí" : "No"} (umbral ${json.umbral})</p>
+          <p><b>Recomendación:</b> ${json.recomendacion}</p>
+          <p>Respuesta de POST /predict (HTTP ${respuesta.status}):</p>
+          <pre>${JSON.stringify(json, null, 2)}</pre>`;
+      } else {
+        // 422 = datos inválidos: se muestra qué campo falló.
+        resultado.className = "error";
+        const errores = json.detail.map(e => `<li>${e.loc.slice(-1)[0]}: ${e.msg}</li>`).join("");
+        resultado.innerHTML = `<h2>Datos inválidos (HTTP ${respuesta.status})</h2><ul>${errores}</ul>`;
+      }
+    });
+
+    llenarEjemplo("moderado");   // el formulario abre con un ejemplo cargado
+  </script>
+</body>
+</html>

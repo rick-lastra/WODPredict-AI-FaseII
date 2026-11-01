@@ -1,0 +1,7 @@
+# Librerías extra para entrenar, probar y ejecutar el notebook en VS Code (no van en la imagen de Docker).
+-r requirements.txt
+httpx==0.28.1            # cliente de pruebas de FastAPI (TestClient)
+pytest==9.2.0
+requests==2.32.5
+matplotlib==3.10.0
+ipykernel==7.4.0
