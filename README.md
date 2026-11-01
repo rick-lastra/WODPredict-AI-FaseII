@@ -1,5 +1,9 @@
 # 🏋️ WODPredict-AI: API de Predicción de Sobrecarga en Docker (Fase II)
 
+> ## 🧭 Capstone journey · WODPredict-AI
+>
+> This is the **main repository** of the WODPredict-AI Master's Capstone: the deployment-oriented continuation of three earlier repositories (NLP fatigue signal → data & training → evaluation & threshold). See [Related repositories](#-related-repositories) and [Project evolution](#-project-evolution) below.
+
 ## 📌 Resumen
 **Nombre del proyecto:** WODPredict-AI (Fase II. Ejecución)
 Este repositorio contiene la Fase II del proyecto final WODPredict-AI para la red de centros **UnderCover Fitness**. El modelo de sobrecarga de las Actividades 5 y 6 se convierte en una **solución técnica desplegable**: artefacto versionado del modelo, API REST con FastAPI, formulario web que consume la API, contenedor Docker, pruebas automatizadas y manual de despliegue en la nube (Azure).
@@ -199,7 +203,9 @@ La API queda disponible en http://localhost:8000 (formulario en `/app` y Swagger
 ## ☁️ Despliegue en la Nube
 La estrategia es **contenedores + PaaS**: la misma imagen que se probó en local se publica en **Azure Container Apps** (región **Mexico Central**) con la cuenta académica **Azure for Students**. Azure administra servidores, HTTPS y escalado, y cobra solo por uso (con capa gratuita mensual). El paso a paso, los requerimientos técnicos y las restricciones de la suscripción de estudiante (MFA, regiones permitidas y build en la nube bloqueado) están en [`docs/manual_despliegue.pdf`](docs/manual_despliegue.pdf), basado en la norma **ISO/IEC 23053:2022**.
 
-**URL pública** (activa durante la evaluación): https://wodpredict-api-mx.calmcliff-e9faa155.mexicocentral.azurecontainerapps.io/app
+**Demo pública:** se desplegó en Azure Container Apps durante la evaluación y luego se apagó para no consumir créditos. Las capturas de [`docs/capturas/`](docs/capturas/) y el [manual de despliegue](docs/manual_despliegue.pdf) documentan el resultado; la imagen se recrea con los comandos de abajo.
+
+*URL que tuvo la demo (ya no responde):* https://wodpredict-api-mx.calmcliff-e9faa155.mexicocentral.azurecontainerapps.io/app
 
 ```powershell
 az login
@@ -254,7 +260,31 @@ El detalle de cada caso (entrada, esperado, real y conclusión) está en [`tests
 *   La API recibe las variables `prob_fatiga_*` ya calculadas, igual que en el dataset de entrenamiento.
 *   La API no tiene autenticación; antes de usarla con datos reales de atletas se debe agregar (ver manual, sección de riesgos).
 
+## 🧩 Related repositories
+
+This project builds on earlier exploratory work. Each repository answers one question and says in its own README how it feeds this one.
+
+| Stage | Repository | Role | What this repo reuses | Status |
+|---|---|---|---|---|
+| 1 | [WODPredictAI (Activity 4)](https://github.com/rick-lastra/WODPredictAI) | **Model comparison (NLP):** three pretrained Hugging Face models evaluated on 84 coach-labelled comments | `prob_fatiga` signal (XLM-R), used as two input features | `exploratory`, superseded |
+| 2 | [Actividad_5](https://github.com/rick-lastra/Actividad_5) | **Data preparation and training:** synthetic dataset, cleaning, leakage removal, three models, MLflow | Dataset `v1.0`, 23 leakage-free features, logistic regression | `archived`, superseded |
+| 3 | [Actividad_6](https://github.com/rick-lastra/Actividad_6) | **Model evaluation:** threshold tuning, ROC and cross-validation, baselines, simulated A/B test | Threshold 0.17 and reference metrics | `archived`, superseded |
+
+The business case that frames the whole project (UnderCover Fitness, Phase I) was delivered as a written report and is not a repository. There is no separate deployment-experiments repository: the API, container and cloud deployment live in this repo.
+
+## 🔄 Project evolution
+
+This repository is the deployment-oriented continuation of those earlier repositories, whose work covers data exploration, feature engineering, model comparison and initial experiments.
+
+1. **Activity 4:** a fatigue signal is extracted from athlete comments with a pretrained NLP model.
+2. **Activity 5:** that signal and training-load features feed a next-day overreaching classifier; logistic regression is selected.
+3. **Activity 6:** the model is evaluated on unseen athletes and the decision threshold is set to 0.17.
+4. **Phase II (this repo):** the selected model becomes a versioned artifact served by a FastAPI service with a web form, a Docker image, 23 automated tests and a deployment on Azure Container Apps.
+
+Earlier stages use synthetic data (plus the author's own personal SugarWOD training log in Activities 4 and 5) and experimental notebooks; they are kept for technical traceability. What is still pending is validation with real data (Wodify pilot, planned for November 2026) and authentication for the API.
+
 ## 🔗 Enlaces
+*   Actividad 4 (módulo NLP de fatiga con Hugging Face): https://github.com/rick-lastra/WODPredictAI
 *   Actividad 5 (datos y entrenamiento con MLflow): https://github.com/rick-lastra/Actividad_5
 *   Actividad 6 (evaluación, validación y umbral): https://github.com/rick-lastra/Actividad_6
 *   Dataset sintético en Hugging Face (versión `v1.0`): https://huggingface.co/datasets/rick-lastra/wodpredict-synth
