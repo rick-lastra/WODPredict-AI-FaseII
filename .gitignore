@@ -20,7 +20,7 @@ __pycache__/
 *.publishsettings
 .azure/
 
-# Datos: el entrenamiento los descarga del tag v1.0 de la Actividad 5; no se guardan en el repositorio
+# Datos: el entrenamiento los descarga del tag v1.0 de la Etapa 2; no se guardan en el repositorio
 datos/
 data/
 *.csv

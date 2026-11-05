@@ -36,14 +36,14 @@ CARPETA_MODELO = CARPETA_RAIZ / "model"
 ARCHIVO_MODELO = CARPETA_MODELO / "model.pkl"
 ARCHIVO_METADATA = CARPETA_MODELO / "metadata.json"
 
-# Datos limpios de la Actividad 5, fijados en el tag v1.0 (siempre es el mismo archivo).
+# Datos limpios de la Etapa 2, fijados en el tag v1.0 (siempre es el mismo archivo).
 URL_DATOS = "https://raw.githubusercontent.com/rick-lastra/WODPredict-AI_etapa-2_preparacion-datos/v1.0/datos/datos_limp/sesiones_limpias.csv"
 DATASET = "rick-lastra/wodpredict-synth@v1.0 (limpio: Actividad_5@v1.0)"
 
 SEMILLA = 42
 VERSION_MODELO = "1.0.0"
 
-# Umbral elegido en la Actividad 6: el más alto con recall >= 0.70 (fuera del fold, solo entrenamiento).
+# Umbral elegido en la Etapa 3: el más alto con recall >= 0.70 (fuera del fold, solo entrenamiento).
 UMBRAL = 0.17
 
 # Variables de entrada: todas se conocen ANTES de la sesión (las mismas de las Actividades 5 y 6).

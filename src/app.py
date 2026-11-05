@@ -137,7 +137,7 @@ def predecir(datos: DatosAtleta):
     # Los vacíos (None) se convierten en NaN para que el pipeline los impute con la mediana.
     fila[metadata["variables_numericas"]] = fila[metadata["variables_numericas"]].astype(float)
 
-    # 2) Probabilidad de la clase 1 (sobrecarga) y decisión con el umbral de la Actividad 6.
+    # 2) Probabilidad de la clase 1 (sobrecarga) y decisión con el umbral de la Etapa 3.
     probabilidad = float(modelo.predict_proba(fila)[0, 1])
     riesgo, recomendacion = clasificar_riesgo(probabilidad)
 
