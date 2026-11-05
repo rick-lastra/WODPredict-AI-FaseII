@@ -1,8 +1,8 @@
 # 🏋️ WODPredict-AI: API de Predicción de Sobrecarga en Docker (Fase II)
 
-> ## 🧭 Capstone journey · WODPredict-AI
+> ## 🧭 Ruta del capstone · WODPredict-AI
 >
-> This is the **main repository** of the WODPredict-AI Master's Capstone: the deployment-oriented continuation of three earlier repositories (NLP fatigue signal → data & training → evaluation & threshold). See [Related repositories](#-related-repositories) and [Project evolution](#-project-evolution) below.
+> Este es el **repositorio principal** del Master's Capstone WODPredict-AI (etapa 4 de 4): la continuación orientada al despliegue de tres repositorios previos (señal NLP de fatiga → datos y entrenamiento → evaluación y umbral). Consulta [Repositorios relacionados](#-repositorios-relacionados) y [Evolución del proyecto](#-evolución-del-proyecto) más abajo.
 
 ## 📌 Resumen
 **Nombre del proyecto:** WODPredict-AI (Fase II. Ejecución)
@@ -260,28 +260,28 @@ El detalle de cada caso (entrada, esperado, real y conclusión) está en [`tests
 *   La API recibe las variables `prob_fatiga_*` ya calculadas, igual que en el dataset de entrenamiento.
 *   La API no tiene autenticación; antes de usarla con datos reales de atletas se debe agregar (ver manual, sección de riesgos).
 
-## 🧩 Related repositories
+## 🧩 Repositorios relacionados
 
-This project builds on earlier exploratory work. Each repository answers one question and says in its own README how it feeds this one.
+Este proyecto se apoya en trabajo exploratorio previo. Cada repositorio responde una pregunta y explica en su propio README cómo alimenta a este.
 
-| Stage | Repository | Role | What this repo reuses | Status |
+| Etapa | Repositorio | Función | Qué reutiliza este repo | Estado |
 |---|---|---|---|---|
-| 1 | [WODPredict-AI_etapa-1_NLP-fatiga](https://github.com/rick-lastra/WODPredict-AI_etapa-1_NLP-fatiga) | **Model comparison (NLP):** three pretrained Hugging Face models evaluated on 84 coach-labelled comments | `prob_fatiga` signal (XLM-R), used as two input features | `exploratory`, superseded |
-| 2 | [WODPredict-AI_etapa-2_preparacion-datos](https://github.com/rick-lastra/WODPredict-AI_etapa-2_preparacion-datos) | **Data preparation and training:** synthetic dataset, cleaning, leakage removal, three models, MLflow | Dataset `v1.0`, 23 leakage-free features, logistic regression | `archived`, superseded |
-| 3 | [WODPredict-AI_etapa-3_evaluacion-modelo](https://github.com/rick-lastra/WODPredict-AI_etapa-3_evaluacion-modelo) | **Model evaluation:** threshold tuning, ROC and cross-validation, baselines, simulated A/B test | Threshold 0.17 and reference metrics | `archived`, superseded |
+| 1 | [WODPredict-AI_etapa-1_NLP-fatiga](https://github.com/rick-lastra/WODPredict-AI_etapa-1_NLP-fatiga) | **Comparación de modelos (NLP):** tres modelos preentrenados de Hugging Face evaluados con 84 comentarios etiquetados por el coach | Señal `prob_fatiga` (XLM-R), usada como dos variables de entrada | `exploratorio`, reemplazado |
+| 2 | [WODPredict-AI_etapa-2_preparacion-datos](https://github.com/rick-lastra/WODPredict-AI_etapa-2_preparacion-datos) | **Preparación de datos y entrenamiento:** dataset sintético, limpieza, eliminación de fuga, tres modelos, MLflow | Dataset `v1.0`, 23 variables sin fuga, regresión logística | `archivado`, reemplazado |
+| 3 | [WODPredict-AI_etapa-3_evaluacion-modelo](https://github.com/rick-lastra/WODPredict-AI_etapa-3_evaluacion-modelo) | **Evaluación del modelo:** ajuste del umbral, ROC y validación cruzada, líneas base, prueba A/B simulada | Umbral 0.17 y métricas de referencia | `archivado`, reemplazado |
 
-The business case that frames the whole project (UnderCover Fitness, Phase I) was delivered as a written report and is not a repository. There is no separate deployment-experiments repository: the API, container and cloud deployment live in this repo.
+El caso de negocio que enmarca todo el proyecto (UnderCover Fitness, Fase I) se entregó como reporte escrito y no es un repositorio. No existe un repositorio aparte de experimentos de despliegue: la API, el contenedor y el despliegue en la nube viven en este repo.
 
-## 🔄 Project evolution
+## 🔄 Evolución del proyecto
 
-This repository is the deployment-oriented continuation of those earlier repositories, whose work covers data exploration, feature engineering, model comparison and initial experiments.
+Este repositorio es la continuación, orientada al despliegue, de esos repositorios previos, cuyo trabajo abarca exploración de datos, ingeniería de variables, comparación de modelos y experimentos iniciales.
 
-1. **Stage 1:** a fatigue signal is extracted from athlete comments with a pretrained NLP model.
-2. **Stage 2:** that signal and training-load features feed a next-day overreaching classifier; logistic regression is selected.
-3. **Stage 3:** the model is evaluated on unseen athletes and the decision threshold is set to 0.17.
-4. **Phase II (this repo):** the selected model becomes a versioned artifact served by a FastAPI service with a web form, a Docker image, 23 automated tests and a deployment on Azure Container Apps.
+1. **Etapa 1:** se extrae una señal de fatiga de los comentarios de los atletas con un modelo NLP preentrenado.
+2. **Etapa 2:** esa señal y las variables de carga de entrenamiento alimentan un clasificador de sobrecarga del día siguiente; se selecciona la regresión logística.
+3. **Etapa 3:** el modelo se evalúa con atletas no vistos y el umbral de decisión se fija en 0.17.
+4. **Etapa 4 (este repo, WODPredict-AI Fase II):** el modelo seleccionado se convierte en un artefacto versionado servido por una API FastAPI con formulario web, una imagen Docker, 23 pruebas automatizadas y un despliegue en Azure Container Apps.
 
-Earlier stages use synthetic data (plus the author's own personal SugarWOD training log in Stages 1 and 2) and experimental notebooks; they are kept for technical traceability. What is still pending is validation with real data (Wodify pilot, planned for November 2026) and authentication for the API.
+Las etapas previas usan datos sintéticos (más el registro personal de entrenamiento SugarWOD del autor en las Etapas 1 y 2) y notebooks experimentales; se conservan por trazabilidad técnica. Lo que sigue pendiente es la validación con datos reales (piloto con Wodify, planeado para noviembre de 2026) y la autenticación de la API.
 
 ## 🔗 Enlaces
 *   Etapa 1 (módulo NLP de fatiga con Hugging Face): https://github.com/rick-lastra/WODPredict-AI_etapa-1_NLP-fatiga
