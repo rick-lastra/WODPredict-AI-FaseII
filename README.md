@@ -6,7 +6,7 @@
 
 ## 📌 Resumen
 **Nombre del proyecto:** WODPredict-AI (Fase II. Ejecución)
-Este repositorio contiene la Fase II del proyecto final WODPredict-AI para la red de centros **UnderCover Fitness**. El modelo de sobrecarga de las Actividades 5 y 6 se convierte en una **solución técnica desplegable**: artefacto versionado del modelo, API REST con FastAPI, formulario web que consume la API, contenedor Docker, pruebas automatizadas y manual de despliegue en la nube (Azure).
+Este repositorio contiene la Fase II del proyecto final WODPredict-AI para la red de centros **UnderCover Fitness**. El modelo de sobrecarga de las Etapas 2 y 3 se convierte en una **solución técnica desplegable**: artefacto versionado del modelo, API REST con FastAPI, formulario web que consume la API, contenedor Docker, pruebas automatizadas y manual de despliegue en la nube (Azure).
 
 **Objetivo General:**
 Que el coach pueda consultar, **antes de la sesión**, si un atleta tiene riesgo de **sobrecarga al día siguiente** (`overreaching_label` = 1) desde un formulario web o desde cualquier sistema que llame a la API, con el mismo resultado en cualquier computadora gracias a Docker.
@@ -58,7 +58,7 @@ Si un dato no cumple el contrato (por ejemplo, `prev_rpe = 11` o falta `load_las
 ## 🛠️ Tecnologías Utilizadas
 *   **Lenguaje:** Python 3.12
 *   **Entorno:** VS Code con las extensiones de Python, Jupyter, Docker y GitHub; Docker Desktop. No requiere GPU.
-*   **Modelo:** regresión logística (`C = 0.1`) en un `Pipeline` de scikit-learn, umbral **0.17** (Actividad 6)
+*   **Modelo:** regresión logística (`C = 0.1`) en un `Pipeline` de scikit-learn, umbral **0.17** (Etapa 3)
 *   **API:** FastAPI + Pydantic + uvicorn (REST, JSON)
 *   **Frontend:** HTML + JavaScript (`fetch`) servido por la misma API
 *   **Contenedor:** Docker (`python:3.12-slim`, usuario sin privilegios, `HEALTHCHECK`)
@@ -72,7 +72,7 @@ Si un dato no cumple el contrato (por ejemplo, `prev_rpe = 11` o falta `load_las
 Sigue la estructura sugerida en la Sesión 8 (`src/ model/ tests/ docs/`), con dos carpetas adicionales: `frontend/` (formulario web) y `notebooks/` (ejecución por celdas).
 
 ```
-WODPredict-AI-FaseII/
+WODPredict-AI_etapa-4_API-despliegue/
 ├── src/
 │   ├── app.py                 # API FastAPI: endpoints, contrato de entrada y salida
 │   ├── model_loader.py        # dónde está el modelo y cómo se carga (lo usan la API y el notebook)
@@ -166,8 +166,8 @@ Dato inválido (prev_rpe = 11) -> HTTP 422: prev_rpe - Input should be less than
 
 ### 1. Instalación
 ```powershell
-git clone https://github.com/rick-lastra/WODPredict-AI-FaseII.git
-cd WODPredict-AI-FaseII
+git clone https://github.com/rick-lastra/WODPredict-AI_etapa-4_API-despliegue.git
+cd WODPredict-AI_etapa-4_API-despliegue
 code .
 ```
 Para las pruebas, el cliente externo y el notebook se crea el ambiente de Python (la API no lo necesita, corre dentro de Docker):
@@ -266,9 +266,9 @@ This project builds on earlier exploratory work. Each repository answers one que
 
 | Stage | Repository | Role | What this repo reuses | Status |
 |---|---|---|---|---|
-| 1 | [WODPredictAI (Activity 4)](https://github.com/rick-lastra/WODPredictAI) | **Model comparison (NLP):** three pretrained Hugging Face models evaluated on 84 coach-labelled comments | `prob_fatiga` signal (XLM-R), used as two input features | `exploratory`, superseded |
-| 2 | [Actividad_5](https://github.com/rick-lastra/Actividad_5) | **Data preparation and training:** synthetic dataset, cleaning, leakage removal, three models, MLflow | Dataset `v1.0`, 23 leakage-free features, logistic regression | `archived`, superseded |
-| 3 | [Actividad_6](https://github.com/rick-lastra/Actividad_6) | **Model evaluation:** threshold tuning, ROC and cross-validation, baselines, simulated A/B test | Threshold 0.17 and reference metrics | `archived`, superseded |
+| 1 | [WODPredict-AI_etapa-1_NLP-fatiga](https://github.com/rick-lastra/WODPredict-AI_etapa-1_NLP-fatiga) | **Model comparison (NLP):** three pretrained Hugging Face models evaluated on 84 coach-labelled comments | `prob_fatiga` signal (XLM-R), used as two input features | `exploratory`, superseded |
+| 2 | [WODPredict-AI_etapa-2_preparacion-datos](https://github.com/rick-lastra/WODPredict-AI_etapa-2_preparacion-datos) | **Data preparation and training:** synthetic dataset, cleaning, leakage removal, three models, MLflow | Dataset `v1.0`, 23 leakage-free features, logistic regression | `archived`, superseded |
+| 3 | [WODPredict-AI_etapa-3_evaluacion-modelo](https://github.com/rick-lastra/WODPredict-AI_etapa-3_evaluacion-modelo) | **Model evaluation:** threshold tuning, ROC and cross-validation, baselines, simulated A/B test | Threshold 0.17 and reference metrics | `archived`, superseded |
 
 The business case that frames the whole project (UnderCover Fitness, Phase I) was delivered as a written report and is not a repository. There is no separate deployment-experiments repository: the API, container and cloud deployment live in this repo.
 
@@ -276,17 +276,17 @@ The business case that frames the whole project (UnderCover Fitness, Phase I) wa
 
 This repository is the deployment-oriented continuation of those earlier repositories, whose work covers data exploration, feature engineering, model comparison and initial experiments.
 
-1. **Activity 4:** a fatigue signal is extracted from athlete comments with a pretrained NLP model.
-2. **Activity 5:** that signal and training-load features feed a next-day overreaching classifier; logistic regression is selected.
-3. **Activity 6:** the model is evaluated on unseen athletes and the decision threshold is set to 0.17.
+1. **Stage 1:** a fatigue signal is extracted from athlete comments with a pretrained NLP model.
+2. **Stage 2:** that signal and training-load features feed a next-day overreaching classifier; logistic regression is selected.
+3. **Stage 3:** the model is evaluated on unseen athletes and the decision threshold is set to 0.17.
 4. **Phase II (this repo):** the selected model becomes a versioned artifact served by a FastAPI service with a web form, a Docker image, 23 automated tests and a deployment on Azure Container Apps.
 
-Earlier stages use synthetic data (plus the author's own personal SugarWOD training log in Activities 4 and 5) and experimental notebooks; they are kept for technical traceability. What is still pending is validation with real data (Wodify pilot, planned for November 2026) and authentication for the API.
+Earlier stages use synthetic data (plus the author's own personal SugarWOD training log in Stages 1 and 2) and experimental notebooks; they are kept for technical traceability. What is still pending is validation with real data (Wodify pilot, planned for November 2026) and authentication for the API.
 
 ## 🔗 Enlaces
-*   Actividad 4 (módulo NLP de fatiga con Hugging Face): https://github.com/rick-lastra/WODPredictAI
-*   Actividad 5 (datos y entrenamiento con MLflow): https://github.com/rick-lastra/Actividad_5
-*   Actividad 6 (evaluación, validación y umbral): https://github.com/rick-lastra/Actividad_6
+*   Etapa 1 (módulo NLP de fatiga con Hugging Face): https://github.com/rick-lastra/WODPredict-AI_etapa-1_NLP-fatiga
+*   Etapa 2 (datos y entrenamiento con MLflow): https://github.com/rick-lastra/WODPredict-AI_etapa-2_preparacion-datos
+*   Etapa 3 (evaluación, validación y umbral): https://github.com/rick-lastra/WODPredict-AI_etapa-3_evaluacion-modelo
 *   Dataset sintético en Hugging Face (versión `v1.0`): https://huggingface.co/datasets/rick-lastra/wodpredict-synth
 
 ## 👥 Contacto y Créditos

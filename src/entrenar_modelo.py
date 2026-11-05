@@ -37,7 +37,7 @@ ARCHIVO_MODELO = CARPETA_MODELO / "model.pkl"
 ARCHIVO_METADATA = CARPETA_MODELO / "metadata.json"
 
 # Datos limpios de la Actividad 5, fijados en el tag v1.0 (siempre es el mismo archivo).
-URL_DATOS = "https://raw.githubusercontent.com/rick-lastra/Actividad_5/v1.0/datos/datos_limp/sesiones_limpias.csv"
+URL_DATOS = "https://raw.githubusercontent.com/rick-lastra/WODPredict-AI_etapa-2_preparacion-datos/v1.0/datos/datos_limp/sesiones_limpias.csv"
 DATASET = "rick-lastra/wodpredict-synth@v1.0 (limpio: Actividad_5@v1.0)"
 
 SEMILLA = 42
